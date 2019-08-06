@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 public class Tank {
     private int x, y;
     private Dir dir;
-    private boolean bL, bU, bR, bD,bLU;
+    private boolean bL, bU, bR, bD;
     public static final int SPEED = 5;
 
     public Tank(int x, int y, Dir dir) {
@@ -39,23 +39,26 @@ public class Tank {
     }
 
     private void setMainDir() {
-        if(!bL && !bU && !bR && !bD){
+        if (!bL && !bU && !bR && !bD) {
             dir = Dir.STOP;
         }
-        if(bL && !bU && !bR && !bD){
+        if (bL && !bU && !bR && !bD) {
             dir = Dir.L;
         }
-        if(!bL && bU && !bR && !bD){
+        if (!bL && bU && !bR && !bD) {
             dir = Dir.U;
         }
-        if(!bL && !bU && bR && !bD){
+        if (!bL && !bU && bR && !bD) {
             dir = Dir.R;
         }
-        if(!bL && !bU && !bR && bD){
+        if (!bL && !bU && !bR && bD) {
             dir = Dir.D;
         }
-        if(bL && bU && !bR && !bD){
+        if (bL && bU && !bR && !bD) {
             dir = Dir.LU;
+        }
+        if (bL && !bU && !bR && bD) {
+            dir = Dir.LD;
         }
     }
 
@@ -76,6 +79,11 @@ public class Tank {
             case LU:
                 y -= SPEED;
                 x -= SPEED;
+                break;
+            case LD:
+                x -= SPEED;
+                y += SPEED;
+                break;
         }
     }
 
