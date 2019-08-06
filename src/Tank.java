@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 public class Tank {
     private int x, y;
     private Dir dir;
-    private boolean bL, bU, bR, bD;
+    private boolean bL, bU, bR, bD,bLU;
     public static final int SPEED = 5;
 
     public Tank(int x, int y, Dir dir) {
@@ -23,19 +23,40 @@ public class Tank {
         int key = e.getKeyCode();
         switch (key) {
             case KeyEvent.VK_LEFT:
-                dir = Dir.L;
+                bL = true;
                 break;
             case KeyEvent.VK_UP:
-                dir = Dir.U;
+                bU = true;
                 break;
             case KeyEvent.VK_RIGHT:
-                dir = Dir.R;
+                bR = true;
                 break;
             case KeyEvent.VK_DOWN:
-                dir = Dir.D;
+                bD = true;
                 break;
         }
+        setMainDir();
+    }
 
+    private void setMainDir() {
+        if(!bL && !bU && !bR && !bD){
+            dir = Dir.STOP;
+        }
+        if(bL && !bU && !bR && !bD){
+            dir = Dir.L;
+        }
+        if(!bL && bU && !bR && !bD){
+            dir = Dir.U;
+        }
+        if(!bL && !bU && bR && !bD){
+            dir = Dir.R;
+        }
+        if(!bL && !bU && !bR && bD){
+            dir = Dir.D;
+        }
+        if(bL && bU && !bR && !bD){
+            dir = Dir.LU;
+        }
     }
 
     private void move() {
@@ -52,6 +73,9 @@ public class Tank {
             case D:
                 y += SPEED;
                 break;
+            case LU:
+                y -= SPEED;
+                x -= SPEED;
         }
     }
 
@@ -59,21 +83,18 @@ public class Tank {
         int key = e.getKeyCode();
         switch (key) {
             case KeyEvent.VK_LEFT:
-                dir = Dir.L;
-                x -= SPEED;
+                bL = false;
                 break;
             case KeyEvent.VK_UP:
-                dir = Dir.U;
-                y -= SPEED;
+                bU = false;
                 break;
             case KeyEvent.VK_RIGHT:
-                dir = Dir.R;
-                x += SPEED;
+                bR = false;
                 break;
             case KeyEvent.VK_DOWN:
-                dir = Dir.D;
-                y += SPEED;
+                bD = false;
                 break;
         }
+        setMainDir();
     }
 }
