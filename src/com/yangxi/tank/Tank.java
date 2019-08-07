@@ -1,10 +1,16 @@
+package com.yangxi.tank;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+/**
+ * @author 25182
+ */
 public class Tank {
     private int x, y;
     private Dir dir;
     private boolean bL, bU, bR, bD;
+    private boolean moving = false;
     public static final int SPEED = 5;
 
     public Tank(int x, int y, Dir dir) {
@@ -39,30 +45,43 @@ public class Tank {
     }
 
     private void setMainDir() {
+        // 四个按键都没有按下去,就停止
         if (!bL && !bU && !bR && !bD) {
-            dir = Dir.STOP;
+            moving = false;
+        }else{
+            moving = true;
+            if (bL && !bU && !bR && !bD) {
+                dir = Dir.L;
+            }
+            if (!bL && bU && !bR && !bD) {
+                dir = Dir.U;
+            }
+            if (!bL && !bU && bR && !bD) {
+                dir = Dir.R;
+            }
+            if (!bL && !bU && !bR && bD) {
+                dir = Dir.D;
+            }
+            if (bL && bU && !bR && !bD) {
+                dir = Dir.LU;
+            }
+            if (bL && !bU && !bR && bD) {
+                dir = Dir.LD;
+            }
+            if (!bL && bU && bR && !bD) {
+                dir = Dir.RU;
+            }
+            if (!bL && !bU && bR && bD) {
+                dir = Dir.RD;
+            }
         }
-        if (bL && !bU && !bR && !bD) {
-            dir = Dir.L;
-        }
-        if (!bL && bU && !bR && !bD) {
-            dir = Dir.U;
-        }
-        if (!bL && !bU && bR && !bD) {
-            dir = Dir.R;
-        }
-        if (!bL && !bU && !bR && bD) {
-            dir = Dir.D;
-        }
-        if (bL && bU && !bR && !bD) {
-            dir = Dir.LU;
-        }
-        if (bL && !bU && !bR && bD) {
-            dir = Dir.LD;
-        }
+
+
     }
 
     private void move() {
+        if(!moving) {return;}
+
         switch (dir) {
             case L:
                 x -= SPEED;
@@ -84,10 +103,18 @@ public class Tank {
                 x -= SPEED;
                 y += SPEED;
                 break;
+            case RU:
+                x += SPEED;
+                y -= SPEED;
+                break;
+            case RD:
+                x += SPEED;
+                y += SPEED;
+                break;
         }
     }
 
-    public void KeyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         switch (key) {
             case KeyEvent.VK_LEFT:
