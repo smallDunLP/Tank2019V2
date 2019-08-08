@@ -1,7 +1,10 @@
 package com.yangxi.tank;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.PrimitiveIterator;
 
 /**
  * @author 25182
@@ -12,16 +15,51 @@ public class Tank {
     private boolean bL, bU, bR, bD;
     private boolean moving = false;
     public static final int SPEED = 5;
+    private Group group;
 
-    public Tank(int x, int y, Dir dir) {
+    public Tank(int x, int y, Dir dir,Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.group = group;
     }
 
 
     public void paint(Graphics g) {
-        g.fillRect(x, y, 50, 50);
+        if(this.group == Group.GOOD){
+            switch (dir){
+                case L:
+                    g.drawImage(ResourceManager.goodTankL,x,y,null);
+                    break;
+                case U:
+                    g.drawImage(ResourceManager.goodTankU,x,y,null);
+                    break;
+                case R:
+                    g.drawImage(ResourceManager.goodTankR,x,y,null);
+                    break;
+                case D:
+                    g.drawImage(ResourceManager.goodTankD,x,y,null);
+                    break;
+            }
+        }
+
+        if(this.group == Group.BAD){
+            switch (dir){
+                case L:
+                    g.drawImage(ResourceManager.badTankL,x,y,null);
+                    break;
+                case U:
+                    g.drawImage(ResourceManager.badTankU,x,y,null);
+                    break;
+                case R:
+                    g.drawImage(ResourceManager.badTankR,x,y,null);
+                    break;
+                case D:
+                    g.drawImage(ResourceManager.badTankD,x,y,null);
+                    break;
+            }
+        }
+
         move();
     }
 
@@ -62,18 +100,18 @@ public class Tank {
             if (!bL && !bU && !bR && bD) {
                 dir = Dir.D;
             }
-            if (bL && bU && !bR && !bD) {
-                dir = Dir.LU;
-            }
-            if (bL && !bU && !bR && bD) {
-                dir = Dir.LD;
-            }
-            if (!bL && bU && bR && !bD) {
-                dir = Dir.RU;
-            }
-            if (!bL && !bU && bR && bD) {
-                dir = Dir.RD;
-            }
+//            if (bL && bU && !bR && !bD) {
+//                dir = Dir.LU;
+//            }
+//            if (bL && !bU && !bR && bD) {
+//                dir = Dir.LD;
+//            }
+//            if (!bL && bU && bR && !bD) {
+//                dir = Dir.RU;
+//            }
+//            if (!bL && !bU && bR && bD) {
+//                dir = Dir.RD;
+//            }
         }
 
 
@@ -129,7 +167,15 @@ public class Tank {
             case KeyEvent.VK_DOWN:
                 bD = false;
                 break;
+            case KeyEvent.VK_CONTROL:
+                fire();
+                break;
         }
         setMainDir();
     }
+
+    private void fire() {
+        TankFrame.INSTANCE.addBullet(new Bullet(x+20,y,dir,group));
+    }
 }
+
