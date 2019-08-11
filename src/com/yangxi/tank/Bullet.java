@@ -2,7 +2,7 @@ package com.yangxi.tank;
 
 import java.awt.*;
 
-public class Bullet {
+public class Bullet extends AbstractGameObject{
     public static final int SPEED = 6;
     private int x;
     private int y;

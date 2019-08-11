@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * @author 25182
  */
-public class Tank {
+public class Tank extends AbstractGameObject{
     public static final int SPEED = 5;
     private int x, y;
     private Dir dir;
@@ -144,12 +144,12 @@ public class Tank {
     private void fire() {
         int bX = x + ResourceManager.goodTankU.getWidth() / 2 - ResourceManager.bulletU.getWidth() / 2;
         int bY = y + ResourceManager.goodTankU.getHeight() / 2 - ResourceManager.bulletU.getHeight() / 2;
-        TankFrame.INSTANCE.addBullet(new Bullet(bX, bY, dir, group));
+        TankFrame.INSTANCE.add(new Bullet(bX, bY, dir, group));
     }
 
     public void die() {
         this.setLive(false);
-        TankFrame.INSTANCE.addExplode(new Explode(x,y));
+        TankFrame.INSTANCE.add(new Explode(x,y));
     }
 }
 

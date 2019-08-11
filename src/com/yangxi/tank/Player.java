@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 /**
  * @author 25182
  */
-public class Player {
+public class Player extends AbstractGameObject{
     public static final int SPEED = 5;
     private int x, y;
     private Dir dir;
@@ -202,7 +202,7 @@ public class Player {
 
     public void die() {
         setLive(false);
-        TankFrame.INSTANCE.addExplode(new Explode(x,y));
+        TankFrame.INSTANCE.add(new Explode(x,y));
     }
 }
 
