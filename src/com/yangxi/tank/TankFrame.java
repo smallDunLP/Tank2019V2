@@ -14,9 +14,9 @@ public class TankFrame extends Frame {
 
     public static final TankFrame INSTANCE = new TankFrame();
 
-    private Tank mytank;
-    private Tank enemy;
-    private List<Bullet> bullets;
+    private Player mytank;
+
+    List<AbstractGameObject> objects;
 
     public static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
 
@@ -25,15 +25,28 @@ public class TankFrame extends Frame {
         this.setLocation(400, 100);
         this.setSize(GAME_WIDTH, GAME_HEIGHT);
 
-        mytank = new Tank(100, 100, Dir.R, Group.GOOD);
-        enemy = new Tank(200, 300, Dir.U, Group.BAD);
-        bullets = new ArrayList<>();
         //设计模式--->Observer模式:观察者模式
         this.addKeyListener(new TankKeyListener());
+
+        initGameObject();
     }
 
-    public void addBullet(Bullet bullet) {
-        bullets.add(bullet);
+    private void initGameObject() {
+        mytank = new Player(100, 100, Dir.R, Group.GOOD);
+        objects = new ArrayList<>();
+
+        int tankCount = Integer.parseInt(PropertyManager.get("initTankCount"));
+
+        for (int i = 0; i < tankCount; i++) {
+            this.add(new Tank(100 + 50 * i, 200, Dir.D, Group.BAD));
+        }
+
+        this.add(new Wall(300, 200, 200, 50));
+
+    }
+
+    public void add(AbstractGameObject go) {
+        objects.add(go);
     }
 
     @Override
@@ -41,14 +54,46 @@ public class TankFrame extends Frame {
         //需要重新绘制的时候 就会自动调用这个方法
         Color c = g.getColor();
         g.setColor(Color.WHITE);
-        g.drawString("bullets:"+bullets.size(),10,50);
+//        g.drawString("bullets:" + bullets.size(), 10, 50);
+//        g.drawString("enemys:" + tanks.size(), 10, 70);
+//        g.drawString("explodes:" + explodes.size(), 10, 90);
         g.setColor(c);
 
         mytank.paint(g);
-        enemy.paint(g);
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).paint(g);
+
+        for (int i = 0; i < objects.size(); i++) {
+            objects.get(i).paint(g);
         }
+//        for (int i = 0; i < tanks.size(); i++) {
+//            if (!tanks.get(i).isLive()) {
+//                tanks.remove(i);
+//            } else {
+//                tanks.get(i).paint(g);
+//            }
+//        }
+//
+//        for (int i = 0; i < bullets.size(); i++) {
+//
+//            for( int j = 0 ; j < tanks.size();j++){
+//                bullets.get(i).collidesWithTank(tanks.get(j));
+////                bullets.get(i).collidesWithPlayer(mytank);
+//            }
+//
+//            if (!bullets.get(i).isIslive()) {
+//                bullets.remove(i);
+//            } else {
+//                bullets.get(i).paint(g);
+//            }
+//
+//        }
+//
+//        for (int i = 0; i < explodes.size(); i++) {
+//            if (!explodes.get(i).isLive()) {
+//                explodes.remove(i);
+//            } else {
+//                explodes.get(i).paint(g);
+//            }
+//        }
 
     }
 
@@ -71,14 +116,11 @@ public class TankFrame extends Frame {
         @Override
         public void keyPressed(KeyEvent e) {
             mytank.keyPressed(e);
-
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-
             mytank.keyReleased(e);
-
         }
     }
 }
