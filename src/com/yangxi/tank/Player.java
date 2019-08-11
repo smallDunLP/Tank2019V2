@@ -1,5 +1,9 @@
 package com.yangxi.tank;
 
+import com.yangxi.tank.strategy.DefaultFireStrategy;
+import com.yangxi.tank.strategy.FireStrategy;
+import com.yangxi.tank.strategy.FourDirFireStrategy;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -28,6 +32,7 @@ public class Player {
         this.y = y;
         this.dir = dir;
         this.group = group;
+        this.initFrieStrategy();
     }
 
 
@@ -154,10 +159,45 @@ public class Player {
         this.y = y;
     }
 
+    public Dir getDir() {
+        return dir;
+    }
+
+    public void setDir(Dir dir) {
+        this.dir = dir;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    private FireStrategy strategy = null;
+
+    private void initFrieStrategy(){
+        String className = PropertyManager.get("tankFireStrategy");
+        try {
+            //使用类加载器
+//            Class clazz = loader.loadClass("com.yangxi.tank.strategy."+className);
+            //Class.forName
+            Class clazz = Class.forName("com.yangxi.tank.strategy."+className);
+            strategy = (FireStrategy) clazz.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void fire() {
-        int bX = x + ResourceManager.goodTankU.getWidth() / 2 - ResourceManager.bulletU.getWidth() / 2;
-        int bY = y + ResourceManager.goodTankU.getHeight() / 2 - ResourceManager.bulletU.getHeight() / 2;
-        TankFrame.INSTANCE.addBullet(new Bullet(bX, bY, dir, group));
+        //默认模式下的发射子弹
+//        ClassLoader loader = Player.class.getClassLoader();
+        strategy.fire(this);
+
+//        int bX = x + ResourceManager.goodTankU.getWidth() / 2 - ResourceManager.bulletU.getWidth() / 2;
+//        int bY = y + ResourceManager.goodTankU.getHeight() / 2 - ResourceManager.bulletU.getHeight() / 2;
+//        TankFrame.INSTANCE.addBullet(new Bullet(bX, bY, dir, group));
     }
 
     public void die() {
