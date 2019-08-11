@@ -1,4 +1,4 @@
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -13,9 +13,6 @@ public class ImageTest {
     public void testImage() throws IOException {
         BufferedImage image = ImageIO.read(new File("C:\\Users\\25182\\IdeaProjects\\Tank2019V2\\src\\images\\bulletL.gif"));
         assertNotNull(image);
-
-
-        
 
     }
 
